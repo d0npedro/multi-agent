@@ -12,16 +12,16 @@ Interactive multi-agent collective simulator (React + Vite SPA). No backend. Bui
 |------|--------|
 | Local project | `D:\Projects\multi-agent` (or clone path) |
 | Default branch | `main` |
-| GitHub remote | See README “Repository” section / `git remote -v` after push |
-| Clone (HTTPS) | `git clone https://github.com/<owner>/multi-agent.git` |
+| GitHub | https://github.com/d0npedro/multi-agent |
+| Clone (HTTPS) | `git clone https://github.com/d0npedro/multi-agent.git` |
 | Pull updates | `git checkout main && git pull origin main` |
-
-If the remote name differs (e.g. `agent-collective`), use that URL from `git remote -v`.
+| Live production URL | https://multi-agent-six-murex.vercel.app |
+| Vercel project | `peters-projects-1631d4ab/multi-agent` (linked to the GitHub repo) |
 
 ### Clone & verify locally
 
 ```bash
-git clone https://github.com/<owner>/multi-agent.git
+git clone https://github.com/d0npedro/multi-agent.git
 cd multi-agent
 npm install
 npm test
@@ -49,6 +49,9 @@ Or import the GitHub repo in the Vercel dashboard:
 5. Deploy
 
 Confirm: open the production URL; HTML title/shell should mention **Agent Collective**.
+
+**Already deployed production alias:** https://multi-agent-six-murex.vercel.app  
+(Dashboard inspect may show deployment-specific `*.vercel.app` hostnames as well.)
 
 ## Subpage under peddavommond.de (`/multi-agent/`)
 

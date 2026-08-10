@@ -7,8 +7,9 @@ Agents (Coder, Researcher, Trader, Monitor, Creative, Critic) claim tasks, messa
 ## Repository
 
 - **Default branch:** `main`
-- **Remote:** set after first push — run `git remote -v` (GitHub under account `d0npedro`, repo name `multi-agent` unless noted otherwise).
+- **GitHub:** https://github.com/d0npedro/multi-agent
 - **Clone:** `git clone https://github.com/d0npedro/multi-agent.git`
+- **Production (Vercel):** https://multi-agent-six-murex.vercel.app
 
 ## Stack
 
