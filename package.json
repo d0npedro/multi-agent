@@ -6,11 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:subpage": "tsc -b && vite build --base /multi-agent/",
     "lint": "oxlint",
     "preview": "vite preview",
+    "preview:subpage": "vite preview --base /multi-agent/",
     "test": "vitest run",
     "test:watch": "vitest"
   },
+
   "dependencies": {
     "@xyflow/react": "^12.11.2",
     "react": "^19.2.8",
