@@ -1,15 +1,34 @@
 /**
- * Capture README screenshots of the local simulator.
- * Usage: node scripts/capture-readme-screenshots.mjs [baseUrl]
+ * Capture documentation screenshots from a running app.
+ * Usage: npm run screenshots
+ *        node scripts/capture-screenshots.mjs [baseUrl]
  */
 import { chromium } from 'playwright';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readdir, unlink } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const outDir = join(__dirname, '..', 'docs', 'screenshots');
 const baseUrl = process.argv[2] ?? 'http://localhost:5173/';
+
+const KEEP = new Set([
+  'hero.png',
+  'graph-live.png',
+  'controls.png',
+  'agents.png',
+  'metrics.png',
+  'resources.png',
+  'events.png',
+  'tasks.png',
+]);
+
+async function shot(locator, name) {
+  await locator.screenshot({
+    path: join(outDir, name),
+    animations: 'disabled',
+  });
+}
 
 await mkdir(outDir, { recursive: true });
 
@@ -22,43 +41,42 @@ const page = await browser.newPage({
 await page.goto(baseUrl, { waitUntil: 'networkidle' });
 await page.getByTestId('app-shell').waitFor();
 await page.getByRole('heading', { name: 'Agent Collective' }).waitFor();
-// Let React Flow finish first layout / fitView
 await page.waitForTimeout(800);
-
-await page.screenshot({
-  path: join(outDir, '01-dashboard-overview.png'),
-  animations: 'disabled',
-});
 
 await page.getByTestId('speed-4').click();
 await page.getByTestId('btn-play').click();
 await page.getByText('LIVE', { exact: true }).waitFor();
-// Let agents claim tasks and logs fill
-await page.waitForTimeout(4500);
-
-await page.screenshot({
-  path: join(outDir, '02-simulation-running.png'),
-  animations: 'disabled',
-});
+await page.waitForTimeout(5000);
 
 await page.getByRole('button', { name: 'Coder-01 Coder' }).click();
 await page.getByTestId('agent-config').waitFor();
-await page.waitForTimeout(300);
+await page.waitForTimeout(250);
 
-await page.screenshot({
-  path: join(outDir, '03-agent-config.png'),
-  animations: 'disabled',
-});
+await shot(page.getByTestId('controls-bar'), 'controls.png');
+await shot(page.getByTestId('agent-panel'), 'agents.png');
+await shot(page.getByTestId('metrics-panel'), 'metrics.png');
+await shot(page.getByTestId('resource-panel'), 'resources.png');
+await shot(page.getByTestId('task-panel'), 'tasks.png');
+await shot(page.getByTestId('agent-graph'), 'graph-live.png');
 
 await page.getByTestId('evt-shortage').click();
 await page.getByTestId('evt-market').click();
 await page.getByTestId('evt-failure').click();
-await page.waitForTimeout(1800);
+await page.waitForTimeout(2000);
 
+await shot(page.getByTestId('event-panel'), 'events.png');
+await shot(page.getByTestId('resource-panel'), 'resources.png');
 await page.screenshot({
-  path: join(outDir, '04-external-events.png'),
+  path: join(outDir, 'hero.png'),
   animations: 'disabled',
 });
 
 await browser.close();
+
+for (const name of await readdir(outDir)) {
+  if (!KEEP.has(name)) {
+    await unlink(join(outDir, name));
+  }
+}
+
 console.log(`Wrote screenshots to ${outDir}`);

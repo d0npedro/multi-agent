@@ -6,7 +6,6 @@ const scratch = process.env.SCRATCH || path.resolve('scratch-ui');
 const url = process.env.APP_URL || 'http://127.0.0.1:4173';
 
 const errors = [];
-const log = [];
 
 async function main() {
   const browser = await chromium.launch({ headless: true });
